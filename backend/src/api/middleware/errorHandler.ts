@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
 import { AppError } from '../../shared/errors';
 import { ZodError } from 'zod';
 
@@ -8,6 +9,11 @@ export function errorHandler(
   res: Response,
   _next: NextFunction,
 ) {
+  if (err instanceof multer.MulterError) {
+    res.status(422).json({ error: err.message });
+    return;
+  }
+
   if (err instanceof AppError) {
     res.status(err.statusCode).json({ error: err.message });
     return;

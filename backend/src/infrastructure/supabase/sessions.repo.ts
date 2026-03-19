@@ -1,30 +1,32 @@
 import { getSupabaseClient } from './client';
-import { Session, SessionStatus, SoapNote } from '../../domain/session';
+import { Session, SessionStatus, ClinicalFacts, SoapNote } from '../../domain/session';
 
-// DB row shape (snake_case) → map to domain type (camelCase)
+// DB row shape (snake_case) — mapped to domain type (camelCase) in toSession()
 interface SessionRow {
-  id:         string;
-  user_id:    string;
-  status:     SessionStatus;
-  audio_path: string | null;
-  transcript: string | null;
-  soap_note:  SoapNote | null;
-  error:      string | null;
-  created_at: string;
-  updated_at: string;
+  id:              string;
+  user_id:         string;
+  status:          SessionStatus;
+  audio_path:      string | null;
+  transcript:      string | null;
+  clinical_facts:  ClinicalFacts | null;
+  soap_note:       SoapNote | null;
+  error:           string | null;
+  created_at:      string;
+  updated_at:      string;
 }
 
 function toSession(row: SessionRow): Session {
   return {
-    id:         row.id,
-    userId:     row.user_id,
-    status:     row.status,
-    audioPath:  row.audio_path,
-    transcript: row.transcript,
-    soapNote:   row.soap_note,
-    error:      row.error,
-    createdAt:  row.created_at,
-    updatedAt:  row.updated_at,
+    id:            row.id,
+    userId:        row.user_id,
+    status:        row.status,
+    audioPath:     row.audio_path,
+    transcript:    row.transcript,
+    clinicalFacts: row.clinical_facts,
+    soapNote:      row.soap_note,
+    error:         row.error,
+    createdAt:     row.created_at,
+    updatedAt:     row.updated_at,
   };
 }
 
@@ -68,11 +70,12 @@ export async function getSession(id: string, userId: string): Promise<Session | 
 }
 
 export interface SessionUpdate {
-  status?:     SessionStatus;
-  audio_path?: string;
-  transcript?: string;
-  soap_note?:  SoapNote;
-  error?:      string;
+  status?:          SessionStatus;
+  audio_path?:      string;
+  transcript?:      string;
+  clinical_facts?:  ClinicalFacts;
+  soap_note?:       SoapNote;
+  error?:           string | null;  // null clears a previous error
 }
 
 export async function updateSession(
