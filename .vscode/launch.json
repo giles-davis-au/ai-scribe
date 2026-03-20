@@ -8,6 +8,20 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["tsx", "src/server.ts"],
       "cwd": "${workspaceFolder}/backend"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Frontend",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend",
+      "preLaunchTask": "Start Frontend Dev Server"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Backend + Frontend",
+      "configurations": ["Debug Backend", "Debug Frontend"]
     }
   ]
 }

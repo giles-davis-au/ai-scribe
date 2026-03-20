@@ -3,5 +3,6 @@
   "editor.formatOnSave": true,
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
-  }
+  },
+  "svelte.language-server.ls-path": "frontend/node_modules/svelte-language-server/bin/server.js"
 }
