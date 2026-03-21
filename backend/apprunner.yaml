@@ -12,3 +12,5 @@ run:
   env:
     - name: NODE_ENV
       value: production
+    - name: AWS_SECRET_NAME
+      value: prod/ai-scribe/Supabase-and-OpenAI
