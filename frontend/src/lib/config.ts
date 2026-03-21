@@ -1,6 +1,5 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
 
-// Paste a valid JWT here for local development.
-// Obtain one by running: npx tsx backend/scripts/getToken.ts
-export const API_TOKEN =
-  "eyJhbGciOiJFUzI1NiIsImtpZCI6ImNmY2I0MDI0LTQxZDMtNDU4MC1iNzFlLTFhZGY3ZTllN2U4YiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xpanl4cGJ6b2JoZGtybHpiemh5LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJiYWNjYzE3Yy01MjBhLTQxOGItOWMyMS1lNGY0Yzc5MmJkMmYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzczOTc3NDI4LCJpYXQiOjE3NzM5NzM4MjgsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWxfdmVyaWZpZWQiOnRydWV9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzczOTczODI4fV0sInNlc3Npb25faWQiOiJlZDhjNDVhMS01NTkyLTQ4NGItOTI2Zi01NWVmY2M5NDIyMTAiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.rUNIIeWISEZFpH_XUUts_1iue2tokRYO-l8hmHMZftHFKqzGd-1dchykXigrlz-t5Ps1XXNbsFzAON6KoQaq1w";
+export const API_KEY =
+  import.meta.env.VITE_API_KEY ?? "";
