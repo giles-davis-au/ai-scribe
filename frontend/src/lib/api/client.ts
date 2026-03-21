@@ -1,7 +1,7 @@
-import { API_BASE_URL, API_TOKEN } from '../config';
+import { API_BASE_URL, API_KEY } from '../config';
 import type { Session } from '../types';
 
-const authHeader = { Authorization: `Bearer ${API_TOKEN}` };
+const authHeader = { Authorization: `Bearer ${API_KEY}` };
 
 // Derive a filename from the blob's MIME type so the backend can detect the format.
 function audioFilename(blob: Blob): string {

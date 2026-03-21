@@ -1,8 +1,10 @@
 import { loadConfig, getConfig } from './infrastructure/aws/secrets';
+import { initServiceAccount } from './infrastructure/supabase/serviceAccount';
 import app from './app';
 
 async function start() {
   await loadConfig();
+  await initServiceAccount();
   const { port } = getConfig();
 
   app.listen(port, () => {

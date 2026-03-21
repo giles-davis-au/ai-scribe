@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { requireAuth }           from '../middleware/auth';
+import { requireApiKey }         from '../middleware/apiKey';
 import { uploadAudioMiddleware } from '../middleware/upload';
 import { createSession }         from '../../application/createSession';
 import { listSessions }          from '../../application/listSessions';
@@ -8,8 +8,8 @@ import { processSessionAudio }   from '../../application/processSessionAudio';
 
 const router = Router();
 
-// All session routes require authentication
-router.use(requireAuth);
+// All session routes require a valid API key
+router.use(requireApiKey);
 
 // POST /sessions — create a new session
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
