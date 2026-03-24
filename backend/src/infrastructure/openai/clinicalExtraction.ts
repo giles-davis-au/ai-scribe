@@ -33,7 +33,7 @@ function toStringArray(v: unknown): string[] {
 }
 
 function normaliseClinicalFacts(raw: unknown): ClinicalFacts {
-  if (typeof raw !== 'object' || raw === null) {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
     throw new Error('Clinical extraction: model response is not a JSON object');
   }
 
