@@ -103,8 +103,7 @@ describe("errorHandler middleware", () => {
         res,
         next,
       );
-      //    expect(res.status).toHaveBeenCalledWith(422); GBD breaking for BuildKite fail test
-      expect(res.status).toHaveBeenCalledWith(36);
+      expect(res.status).toHaveBeenCalledWith(422);
       expect(res.json).toHaveBeenCalledWith({
         error: "Session is already processing",
       });
