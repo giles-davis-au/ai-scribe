@@ -50,6 +50,8 @@ session and returned to the frontend.
 - **Data/auth:** Supabase (Postgres, Storage, Auth)
 - **AI:** OpenAI Whisper (transcription), GPT-4o (clinical extraction + SOAP notes)
 - **Infrastructure:** AWS App Runner (backend), S3 + CloudFront (frontend), Secrets Manager (config)
+- **Testing:** Jest unit tests for the backend (`backend/src/**/*.test.ts`). CI was set up via
+  Buildkite during development but isn't actively maintained for this demo.
 
 ## Running locally
 
