@@ -40,6 +40,14 @@
 <main>
   <h1>AI Scribe</h1>
 
+  <p>An ambient clinical scribe demo — record a conversation, and it automatically
+    transcribes it, extracts key clinical details, and generates a structured SOAP note.</p>
+  <p>Under the hood: audio is transcribed with OpenAI's Whisper, then GPT-4o extracts
+    clinical facts and drafts the note.</p>
+  <p>⚠️ This is a portfolio/demo prototype, not a production or clinically validated tool.
+    Please don't record or enter real patient or personal health information — use a
+    sample conversation instead.</p>
+
   {#if state === 'idle' || state === 'error'}
     <Recorder onRecorded={handleRecorded} />
   {/if}
