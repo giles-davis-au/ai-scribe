@@ -1,5 +1,7 @@
 # AI Scribe
 
+By [Giles Davis](https://www.linkedin.com/in/gilesbdavis/)
+
 An ambient clinical scribe prototype: record a conversation, and it automatically
 transcribes it, extracts key clinical details, and generates a structured SOAP note.
 
@@ -20,6 +22,12 @@ or reliability. It should not be assumed to meet production standards in any
 of those areas — see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the known
 gaps (auth model, rate limiting, cost controls, etc.) if that level of detail
 is useful.
+
+Cost exposure is bounded by a hard, enforced spend limit on the OpenAI account
+rather than in-application rate limiting; Supabase's free tier (no billing
+method attached) additionally means there's no possibility of a surprise
+invoice from that side, though its usage caps aren't a deliberate
+rate-limiting control.
 
 ## Architecture
 
