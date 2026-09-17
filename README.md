@@ -1,13 +1,13 @@
 # AI Scribe
 
-By [Giles Davis](https://www.linkedin.com/in/gilesbdavis/)
-
 An ambient clinical scribe prototype: record a conversation, and it automatically
 transcribes it, extracts key clinical details, and generates a structured SOAP note.
 
 **Live demo:** https://dsswk2puqvh3r.cloudfront.net
 *(Demo only — please don't record or enter real patient or personal health
 information; use a sample conversation instead.)*
+
+By [Giles Davis](https://www.linkedin.com/in/gilesbdavis/)
 
 ## Context
 
