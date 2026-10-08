@@ -1,8 +1,10 @@
 # Deployment Runbook
 
 Reverse-engineered from the live AWS infrastructure and git history (no original
-deployment notes survived — see caveat at the bottom). Treat resource names/IDs
-below as current as of 2026-09-16; re-verify before relying on them long after.
+deployment notes survived — see caveat at the bottom). Specific resource names
+and IDs (bucket, distribution, service URL, secret name) are deliberately left as
+placeholders such as `<frontend-bucket>`; they live in the AWS account, not in
+this repo.
 
 ## Architecture
 
@@ -10,19 +12,19 @@ below as current as of 2026-09-16; re-verify before relying on them long after.
 Browser
   │
   ▼
-CloudFront (dsswk2puqvh3r.cloudfront.net)
+CloudFront distribution
   │  serves static SvelteKit build
   ▼
-S3 bucket: ai-scribe-frontend-giles (ap-southeast-2)
+S3 bucket, private (ap-southeast-2)
 
 Browser fetch (Bearer <API_KEY>)
   │
   ▼
-App Runner service (4bptyd6pq3.ap-southeast-2.awsapprunner.com)
+App Runner service (ap-southeast-2)
   │  Express backend, runtime nodejs22
   │  reads config from Secrets Manager at startup
   ▼
-Secrets Manager: prod/ai-scribe/Supabase-and-OpenAI (ap-southeast-2)
+Secrets Manager secret (ap-southeast-2)
   │
   ├─► Supabase (auth + Postgres + Storage)
   └─► OpenAI (Whisper transcription + GPT-4o extraction/SOAP)
@@ -36,7 +38,7 @@ prototype auth model, not per-user auth — worth knowing before extending it.
 
 ## Prerequisites
 
-- AWS CLI configured. The `giles-davis-cli` IAM user only has CloudFront/S3
+- AWS CLI configured. The CLI IAM user only has CloudFront/S3
   read-write; it does **not** have `secretsmanager:*` or `apprunner:*` — those
   steps below must be done in the AWS console (or widen the IAM policy first).
 - Node 22, npm.
@@ -48,7 +50,8 @@ Everything the backend needs at runtime lives in one Secrets Manager secret,
 as a flat JSON object:
 
 ```
-Console: https://ap-southeast-2.console.aws.amazon.com/secretsmanager/secret?name=prod%2Fai-scribe%2FSupabase-and-OpenAI&region=ap-southeast-2
+AWS console → Secrets Manager (ap-southeast-2) → the secret named by the
+AWS_SECRET_NAME env var in backend/apprunner.yaml
 ```
 
 Required keys (see [secrets.ts](../backend/src/infrastructure/aws/secrets.ts)):
@@ -74,7 +77,8 @@ service restarts (see below).
 
 ## Backend deployment (App Runner)
 
-- Service URL: `https://4bptyd6pq3.ap-southeast-2.awsapprunner.com`
+- Service URL: the App Runner default domain for the service (this is the
+  `VITE_API_BASE_URL` baked into the frontend build)
 - Config: [backend/apprunner.yaml](../backend/apprunner.yaml) — runtime
   `nodejs22`, build = `npm install && npm run build`, run = `npm run start`,
   port 3000.
@@ -94,20 +98,21 @@ sync. From `frontend/`:
 
 ```bash
 npm run build
-aws s3 sync build/ s3://ai-scribe-frontend-giles --delete
-aws cloudfront create-invalidation --distribution-id E2YUJB2IQCESXX --paths "/*"
+aws s3 sync build/ s3://<frontend-bucket> --delete
+aws cloudfront create-invalidation --distribution-id <distribution-id> --paths "/*"
 ```
 
-- Bucket: `ai-scribe-frontend-giles` (ap-southeast-2)
-- CloudFront distribution: `E2YUJB2IQCESXX` → `dsswk2puqvh3r.cloudfront.net`
+- Bucket: `<frontend-bucket>` (ap-southeast-2), private, served only via CloudFront
+- CloudFront distribution: `<distribution-id>` → the public demo domain linked from the README
 - Build-time env: `frontend/.env.production` (`VITE_API_BASE_URL`,
   `VITE_API_KEY`) — SvelteKit with `adapter-static`, so these are baked into
   the static bundle, not read at runtime. Changing either requires a rebuild
   and re-sync, not just an env change.
 
-⚠️ `frontend/.env.production` is currently committed to git with a real
-`VITE_API_KEY` value in plaintext. If you haven't already rotated and fixed
-this, do that before treating this file as a template.
+`frontend/.env.production` is git-ignored (`.env*` in `.gitignore`, with an
+`.env.example` exception) and must stay that way — `VITE_API_KEY` lives only in
+that local file. An earlier version of this repo did commit it; that key has
+since been rotated and is no longer valid.
 
 ## CI (Buildkite)
 
@@ -137,7 +142,7 @@ npm run dev         # vite dev, http://localhost:5173
 - No infrastructure-as-code (App Runner, S3, CloudFront, Secrets Manager were
   all set up by hand) — a redeploy-from-scratch is undocumented.
 - Frontend deploy is a manual local `sync` + `invalidation`, not CI-driven.
-- `giles-davis-cli` IAM user lacks permissions to inspect or manage
+- The CLI IAM user lacks permissions to inspect or manage
   Secrets Manager / App Runner — console access (or a broader policy) is
   required for those steps.
 - App Runner's auto-deploy setting is unverified (see above).
